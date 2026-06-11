@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState , useEffect  } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 
@@ -8,7 +8,11 @@ function Login(props) {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
- const handleLogin = async (e) => {
+  useEffect(() => {
+  document.body.className = localStorage.getItem('theme') || 'dark';
+}, []);
+
+  const handleLogin = async (e) => {
     e.preventDefault();
     try {
       const res = await axios.post('http://localhost:5000/api/auth/login', {
@@ -24,8 +28,8 @@ function Login(props) {
   };
 
   return (
-    <div className="container">
-      <h2>Login</h2>
+    <div className="auth-container">
+      <h2>Welcome Back 👋</h2>
       {error && <p className="error">{error}</p>}
       <form onSubmit={handleLogin}>
         <input
@@ -33,16 +37,20 @@ function Login(props) {
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          required
         />
         <input
           type="password"
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          required
         />
-        <button type="submit">Login</button>
+        <button type="submit" style={{width: '100%'}}>Login</button>
       </form>
-      <p>Don't have an account? <Link to="/register">Register</Link></p>
+      <p style={{marginTop: '1rem', color: 'var(--text-soft)'}}>
+        Don't have an account? <Link to="/register">Register</Link>
+      </p>
     </div>
   );
 }
